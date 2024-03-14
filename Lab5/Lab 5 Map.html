@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Name First Web Map</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+        #map { height: 500px; }
+    </style>
+</head>
+<body>
+    <h1>Alex Aquino First Web Map</h1>
+    <div id="map"></div>
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        
+        var map = L.map('map').setView([30.6102, -96.3417], 15); 
+
+        
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        
+        var kyleField = L.circle([30.6101, -96.3400], {
+            color: 'blue',
+            fillColor: '#0080ff',
+            fillOpacity: 0.5,
+            radius: 100 // Adjust radius as needed
+        }).addTo(map);
+        kyleField.bindPopup("<b>Kyle Field</b><br>Home of the Texas A&M Aggies").openPopup();
+
+        
+        var oMIcon = L.icon({
+            iconUrl: 'https://leafletjs.com/examples/custom-icons/leaf-green.png',
+            iconSize: [38, 95],
+            iconAnchor: [22, 94],
+            popupAnchor: [-3, -76]
+        });
+        var oM = L.marker([30.6180, -96.3389], {icon: oMIcon}).addTo(map);
+        oM.bindPopup("<b>O&M Building</b><br>Texas A&M University");
+
+        var academicIcon = L.icon({
+            iconUrl: 'https://leafletjs.com/examples/custom-icons/leaf-red.png',
+            iconSize: [38, 95],
+            iconAnchor: [22, 94],
+            popupAnchor: [-3, -76]
+        });
+        var academic = L.marker([30.6129, -96.3429], {icon: academicIcon}).addTo(map);
+        academic.bindPopup("<b>Academic Building</b><br>Texas A&M University");
+
+    
+        function onMapClick(e) {
+            L.popup()
+                .setLatLng(e.latlng)
+                .setContent("Coordinates: " + e.latlng.toString())
+                .openOn(map);
+        }
+        map.on('click', onMapClick);
+    </script>
+</body>
+</html>
