@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alex Aquino TAMU Map</title>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        #map {
+            height: 100vh;
+            width: 100%;
+        }
+
+        .building:hover {
+            fill-opacity: 0.7;
+            cursor: pointer;
+        }
+
+        .info {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background: white;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            pointer-events: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="map"></div>
+    <div class="info" id="building-info"></div>
+
+    <script>
+       
+        var map = L.map('map').setView([30.611576, -96.342056], 16);
+
+     
+        var tamuBuildings = L.geoJSON(tamuBuildingData, {
+            style: function (feature) {
+                return {
+                    fillColor: "Maroon", // Set building color to Maroon
+                    fillOpacity: 0.5,
+                    weight: 1,
+                    color: "black"
+                };
+            },
+            onEachFeature: function (feature, layer) {
+                layer.on('mouseover', function (e) {
+                    highlightBuilding(e.target);
+                    showBuildingInfo(feature.properties.name, feature.properties.abbr);
+                });
+                layer.on('mouseout', function (e) {
+                    resetHighlight(e.target);
+                    hideBuildingInfo();
+                });
+                layer.on('click', function (e) {
+                    map.fitBounds(e.target.getBounds());
+                });
+            }
+        }).addTo(map);
+
+       
+        function highlightBuilding(layer) {
+            layer.setStyle({
+                fillOpacity: 0.7
+            });
+        }
+
+               function resetHighlight(layer) {
+            tamuBuildings.resetStyle(layer);
+        }
+
+ 
+        function showBuildingInfo(name, abbr) {
+            document.getElementById('building-info').innerHTML = '<strong>' + name + '</strong><br>' + abbr;
+        }
+
+      
+        function hideBuildingInfo() {
+            document.getElementById('building-info').innerHTML = '';
+        }
+
+     
+        var tamuBuildingData = {
+            "type": "FeatureCollection",
+            "features": [{
+                    "type": "Feature",
+                    "properties": {
+                        "name": "Zachry Engineering Education Complex",
+                        "abbr": "ZACH"
+                    },
+                    "geometry": {
+                        "type": "Polygon",
+                        "coordinates": [
+                            [
+                                [-96.34123170375824, 30.62073175681968],
+                                [-96.34085941314696, 30.620723437293764],
+                                [-96.34084188961981, 30.62081604087187],
+                                [-96.3412141802311, 30.620824360387175],
+                                [-96.34123170375824, 30.62073175681968]
+                            ]
+                        ]
+                    }
+                },
+                {
+                    "type": "Feature",
+                    "properties": {
+                        "name": "Evans Library",
+                        "abbr": "EVANS"
+                    },
+                    "geometry": {
+                        "type": "Polygon",
+                        "coordinates": [
+                            [
+                                [-96.34287536144257, 30.62065143844656],
+                                [-96.3428635597229, 30.62030242629576],
+                                [-96.34265553951262, 30.62030896527416],
+                                [-96.34266561222076, 30.620658182945454],
+                                [-96.34287536144257, 30.62065143844656]
+                            ]
+                        ]
+                    }
+                }
+            ]
+        };
+    </script>
+</body>
+
+</html>
+
